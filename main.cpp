@@ -3,13 +3,12 @@
 using namespace std;
 
 int main() {
-    MyImage image("new.bmp");
+    MyImage image(15, 15, "new.bmp");
 
     Editor editor(&image);
-    editor.PutPixel({2, 0}, {123, 221, 12});
-    editor.PutPixel({1, 0}, {223, 11, 12});
-    editor.PutPixel({3, 3}, {33, 221, 13});
-    editor.PutPixel({3, 0}, {3, 21, 11});
+    editor.DrawAxis();
+
+    editor.PutPixel({2, 5}, {255, 0, 0});
 
     editor.Save();
 

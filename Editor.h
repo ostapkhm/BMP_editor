@@ -7,6 +7,8 @@ class Editor {
 public:
     Editor(MyImage* image): image_(image) {    }
     void PutPixel(Point point, Pixel pixel);
+    void DrawAxis();
+
     void Save();
 
 private:
