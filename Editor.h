@@ -8,10 +8,13 @@ public:
     Editor(MyImage* image): image_(image) {    }
     void PutPixel(Point point, Pixel pixel);
     void DrawAxis();
+    void DrawLine(Point p1, Point p2);
 
     void Save();
 
 private:
+    void DrawLine_(Point p1, Point p2);
+
     MyImage* image_;
 };
 
