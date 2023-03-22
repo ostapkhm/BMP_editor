@@ -15,7 +15,12 @@ struct Point{
 
 class Pixel {
 public:
-    Pixel()=default;
+    Pixel(){
+        red_ = 255;
+        green_ = 255;
+        blue_ = 255;
+    }
+
     Pixel(unsigned char red, unsigned char green, unsigned char blue): red_(red), green_(green), blue_(blue) {  }
 
     void set(unsigned char red, unsigned char green, unsigned char blue){
