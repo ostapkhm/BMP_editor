@@ -14,8 +14,8 @@ void Editor::PutPixel(Point point, Pixel pixel, int thickness) {
     }
 }
 
-void Editor::Save() {
-    image_->CreateFromMatrix();
+void Editor::Save(const std::string& filename) {
+    image_->Save(filename);
 }
 
 void Editor::DrawAxis() {

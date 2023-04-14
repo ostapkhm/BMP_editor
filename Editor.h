@@ -15,7 +15,7 @@ public:
     void DrawLine(Point p1, Point p2, Pixel pixel, int thickness = 1);
     void DrawRandomColouredLine(Point p1, Point p2, int thickness = 1);
 
-    void Save();
+    void Save(const std::string& filename);
 
 private:
     void DrawLineHigh(Point p1, Point p2, int thickness, Pixel pixel);

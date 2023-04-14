@@ -7,31 +7,50 @@
 
 #include "Pixel.h"
 
+
+#pragma pack(push, 1) // exact fit - no padding
+struct BMPHeader{
+    // Bitmap File Header
+    uint16_t  type;             // File identifier
+    uint32_t  size;             // File size in bytes
+    uint16_t  reserved1;        // Not used
+    uint16_t  reserved2;        // Not used
+    uint32_t  offset;           // Offset to image data in bytes from beginning of file (54 bytes)
+
+    // DIB Header
+    uint32_t  dib_header_size;  // DIB Header size in bytes (40 bytes)
+    int32_t   width_px;         // Width of the image
+    int32_t   height_px;        // Height of image
+    uint16_t  num_planes;       // Number of color planes
+    uint16_t  bits_per_pixel;   // Bits per pixel
+    uint32_t  compression;      // Compression type
+    uint32_t  image_size_bytes; // Image size in bytes
+    int32_t   x_resolution_ppm; // Pixels per meter
+    int32_t   y_resolution_ppm; // Pixels per meter
+    uint32_t  num_colors;       // Number of colors
+    uint32_t  important_colors; // Important colors
+};
+#pragma pack(pop)
+
+
+
 class MyImage {
 public:
-    MyImage(int width, int height, std::string filename);
-    explicit MyImage(std::string filepath);
+    MyImage(int width, int height);
+    explicit MyImage(const std::string& filepath);
+    void Save(const std::string& filename);
     ~MyImage();
 
 
 private:
-    int BytesToInt(const unsigned char *buffer, int idx);
-    void IntToBuffer(unsigned char *buffer, int idx, int value);
-    void FillHeaders(unsigned char* file_header, unsigned char* information_header, int file_size);
-
-    void CreateFromMatrix();
-
+    void Create2DPixelMatrix();
 
     // height and width in pixels
     int height_;
     int width_;
-
     // RGB is used (24 bits)
-    int channels_ = 3;
-
+    const int channels_ = 3;
     Pixel** matrix_;
-    std::string filename_;
-
     friend class Editor;
 };
 
