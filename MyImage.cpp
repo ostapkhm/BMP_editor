@@ -4,15 +4,25 @@
 
 
 MyImage::MyImage(int width, int height): height_(height), width_(width) {
-    Create2DPixelMatrix();
+    // Create 2d pixel matrix of image size
+    matrix_ = new Pixel*[height_];
+    for(int i = 0; i < height_; i++){
+        matrix_[i] = new Pixel[width_];
+    }
 }
 
-MyImage::MyImage(const std::string& filepath) {
-    // Load from file
+MyImage *MyImage::CreateBlank(int width, int height) {
+    if(width > 0 && height > 0){
+        return new MyImage(width, height);
+    }
+    return nullptr;
+}
+
+MyImage *MyImage::LoadFromFile(const std::string &filepath) {
     std::ifstream file(filepath, std::ios::binary);
     if(!file.is_open()){
         std::cerr << "File could not be opened!" << std::endl;
-        exit(1);
+        return nullptr;
     }
 
     BMPHeader header { };
@@ -20,38 +30,44 @@ MyImage::MyImage(const std::string& filepath) {
 
     file.read(reinterpret_cast<char*>(&header), file_header_size);
 
-    // check whether it's a BMP file
+    // Check whether it's a BMP file
     if(header.type != 0x4d42){
         std::cerr << "Provided file is not a bmp file!" << std::endl;
         file.close();
-        exit(1);
+        return nullptr;
     }
 
-    // extract important parameters
-    width_ = header.width_px;
-    height_ = header.height_px;
-    int padding = (4 - (channels_ * width_) % 4) % 4;
+    // Check whether this file has only 3 channels (RGB)
+    if(header.bits_per_pixel != channels_ * 8){
+        std::cerr << "Provided file doesn't have 3 channels" << std::endl;
+        file.close();
+        return nullptr;
+    }
 
-    Create2DPixelMatrix();
+    // Extract important parameters
+    int width = header.width_px;
+    int height = header.height_px;
+    int padding = (4 - (channels_ * width) % 4) % 4;
+
+    MyImage* image = new MyImage(width, height);
 
     unsigned char color[channels_];
-    for(int y = 0; y < height_; y++){
-        for(int x = 0; x < width_; x++){
+    for(int y = 0; y < height; y++){
+        for(int x = 0; x < width; x++){
             file.read(reinterpret_cast<char*>(color), channels_);
-            matrix_[y][x].set(color[2], color[1], color[0]);
+            image->matrix_[y][x].set(color[2], color[1], color[0]);
         }
         file.ignore(padding);
     }
-
     file.close();
+    return image;
 }
 
-void MyImage::Create2DPixelMatrix() {
-    // Create 2d pixel matrix of image size
-    matrix_ = new Pixel*[height_];
+MyImage::~MyImage() {
     for(int i = 0; i < height_; i++){
-        matrix_[i] = new Pixel[width_];
+        delete matrix_[i];
     }
+    delete[] matrix_;
 }
 
 void MyImage::Save(const std::string& filename) {
@@ -89,11 +105,4 @@ void MyImage::Save(const std::string& filename) {
     }
 
     file.close();
-}
-
-MyImage::~MyImage() {
-    for(int i = 0; i < height_; i++){
-        delete matrix_[i];
-    }
-    delete matrix_;
 }

@@ -36,20 +36,20 @@ struct BMPHeader{
 
 class MyImage {
 public:
-    MyImage(int width, int height);
-    explicit MyImage(const std::string& filepath);
-    void Save(const std::string& filename);
+    static MyImage* CreateBlank(int width, int height);
+    static MyImage* LoadFromFile(const std::string& filepath);
     ~MyImage();
 
+    void Save(const std::string& filename);
 
 private:
-    void Create2DPixelMatrix();
+    MyImage(int width, int height);
 
     // height and width in pixels
     int height_;
     int width_;
     // RGB is used (24 bits)
-    const int channels_ = 3;
+    static const int channels_ = 3;
     Pixel** matrix_;
     friend class Editor;
 };

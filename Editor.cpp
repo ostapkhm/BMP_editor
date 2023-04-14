@@ -2,7 +2,7 @@
 
 
 void Editor::PutPixel(Point point, Pixel pixel, int thickness) {
-    // need center image
+    // need to center image
     int x_offset = image_->width_ / 2 ;
     int y_offset = image_->height_ / 2;
 
