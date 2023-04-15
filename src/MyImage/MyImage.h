@@ -3,7 +3,6 @@
 
 #include <fstream>
 #include <iostream>
-#include <utility>
 
 #include "Pixel.h"
 

@@ -1,8 +1,5 @@
 #include "MyImage.h"
 
-#include <utility>
-
-
 MyImage::MyImage(int width, int height): height_(height), width_(width) {
     // Create 2d pixel matrix of image size
     matrix_ = new Pixel*[height_];

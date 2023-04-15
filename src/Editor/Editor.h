@@ -1,7 +1,6 @@
 #ifndef LAB_1_EDITOR_H
 #define LAB_1_EDITOR_H
 
-#include <cstdlib>
 #include <ctime>
 #include <random>
 
