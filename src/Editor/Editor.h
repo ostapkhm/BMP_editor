@@ -3,13 +3,16 @@
 
 #include <cstdlib>
 #include <ctime>
+#include <random>
 
 #include "../MyImage/MyImage.h"
 
 
 class Editor {
 public:
-    Editor(MyImage* image): image_(image) {    }
+    Editor(MyImage* image): image_(image) {
+        random_engine_ = std::default_random_engine(time(nullptr));
+    }
     void PutPixel(Point point, Pixel pixel, int thickness);
     void DrawAxis();
     void DrawLine(Point p1, Point p2, Pixel pixel, int thickness = 1);
@@ -22,7 +25,9 @@ private:
     void DrawLineLow(Point p1, Point p2, int thickness, Pixel pixel);
     void DrawLineHighRandom(Point p1, Point p2, int thickness);
     void DrawLineLowRandom(Point p1, Point p2, int thickness);
+    Pixel GetRandomPixel();
 
+    std::default_random_engine random_engine_;
     MyImage* image_;
 };
 

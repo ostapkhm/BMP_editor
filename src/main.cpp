@@ -5,14 +5,12 @@
 using namespace std;
 
 int main() {
-    srand(time(nullptr));
-
-    std::unique_ptr<MyImage> image(MyImage::CreateBlank(2045, 2056));
+    std::unique_ptr<MyImage> image(MyImage::CreateBlank(545, 556));
 
     Editor editor(image.get());
     editor.DrawAxis();
-    //editor.DrawRandomColouredLine({-205, -180}, {200, 100});
-    editor.DrawRandomColouredLine({-300, -340}, {-360, 490}, 2);
+    editor.DrawLine({100, 100}, {-40, 40}, {123, 213, 134});
+    editor.DrawRandomColouredLine({-100, -120}, {-160, -190});
     editor.Save("new.bmp");
 
     return 0;

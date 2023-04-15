@@ -143,19 +143,8 @@ void Editor::DrawLineHighRandom(Point p1, Point p2, int thickness) {
     int delta = 2 * dy - dx;
     int x = p1.x;
 
-    unsigned char red;
-    unsigned char green;
-    unsigned char blue;
-
     for(int y = p1.y; y <= p2.y; y++){
-        if(rand() % 255 > 100){
-            //change color
-            red = rand() % 255;
-            green = rand() % 255;
-            blue = rand() % 255;
-        }
-
-        PutPixel({x, y}, {red, green, blue}, thickness);
+        PutPixel({x, y}, GetRandomPixel(), thickness);
         if(delta > 0){
             x += x_sign;
             delta += 2 * (dx - dy);
@@ -179,19 +168,8 @@ void Editor::DrawLineLowRandom(Point p1, Point p2, int thickness) {
     int delta = 2 * dy - dx;
     int y = p1.y;
 
-    unsigned char red;
-    unsigned char green;
-    unsigned char blue;
-
     for(int x = p1.x; x <= p2.x; x++){
-        if(rand() % 255 > 100){
-            //change color
-            red = rand() % 255;
-            green = rand() % 255;
-            blue = rand() % 255;
-        }
-
-        PutPixel({x, y}, {red, green, blue}, thickness);
+        PutPixel({x, y}, GetRandomPixel(), thickness);
         if(delta > 0){
             y += y_sign;
             delta += 2 * (dy - dx);
@@ -200,4 +178,19 @@ void Editor::DrawLineLowRandom(Point p1, Point p2, int thickness) {
             delta += 2 * dy;
         }
     }
+}
+
+Pixel Editor::GetRandomPixel() {
+    unsigned char red;
+    unsigned char green;
+    unsigned char blue;
+    std::uniform_int_distribution<int> int_distro(0, 255);
+
+
+    // change color
+    red = int_distro(random_engine_);
+    green = int_distro(random_engine_);
+    blue = int_distro(random_engine_);
+
+    return {red, green, blue};
 }
