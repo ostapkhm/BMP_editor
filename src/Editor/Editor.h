@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <ctime>
 
-#include "MyImage.h"
+#include "../MyImage/MyImage.h"
 
 
 class Editor {

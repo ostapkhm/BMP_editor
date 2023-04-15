@@ -2,13 +2,20 @@
 
 
 void Editor::PutPixel(Point point, Pixel pixel, int thickness) {
-    // need to center image
+    // need to center the image
     int x_offset = image_->width_ / 2 ;
     int y_offset = image_->height_ / 2;
 
     // thickness
     for(int y = point.y - thickness; y <= point.y + thickness; y++){
         for(int x = point.x - thickness; x <= point.x + thickness; x++){
+            if(y + y_offset < 0 || y + y_offset >= image_->height_){
+                throw std::invalid_argument("Y-coordinate exceeds available range!");
+            }
+            if(x + x_offset < 0 || x + x_offset >= image_->width_){
+                throw std::invalid_argument("X-coordinate exceeds available range!");
+            }
+
             image_->matrix_[y + y_offset][x + x_offset] = pixel;
         }
     }
@@ -29,21 +36,26 @@ void Editor::DrawAxis() {
 }
 
 void Editor::DrawLine(Point p1, Point p2, Pixel pixel, int thickness) {
-    if(std::abs(p2.y - p1.y) < std::abs(p2.x - p1.x)){
-        if(p1.x > p2.x){
-            DrawLineLow(p2, p1, thickness, pixel);
+    try{
+        if(std::abs(p2.y - p1.y) < std::abs(p2.x - p1.x)){
+            if(p1.x > p2.x){
+                DrawLineLow(p2, p1, thickness, pixel);
+            }
+            else{
+                DrawLineLow(p1, p2, thickness, pixel);
+            }
         }
         else{
-            DrawLineLow(p1, p2, thickness, pixel);
+            if(p1.y > p2.y){
+                DrawLineHigh(p2, p1, thickness, pixel);
+            }
+            else{
+                DrawLineHigh(p1, p2, thickness, pixel);
+            }
         }
     }
-    else{
-        if(p1.y > p2.y){
-            DrawLineHigh(p2, p1, thickness, pixel);
-        }
-        else{
-            DrawLineHigh(p1, p2, thickness, pixel);
-        }
+    catch(std::invalid_argument& exp){
+        std::cerr << exp.what() << std::endl;
     }
 }
 
@@ -98,21 +110,23 @@ void Editor::DrawLineHigh(Point p1, Point p2, int thickness, Pixel pixel) {
 }
 
 void Editor::DrawRandomColouredLine(Point p1, Point p2, int thickness) {
-    if(std::abs(p2.y - p1.y) < std::abs(p2.x - p1.x)){
-        if(p1.x > p2.x){
-            DrawLineLowRandom(p2, p1, thickness);
-        }
-        else{
-            DrawLineLowRandom(p1, p2, thickness);
+    try {
+        if (std::abs(p2.y - p1.y) < std::abs(p2.x - p1.x)) {
+            if (p1.x > p2.x) {
+                DrawLineLowRandom(p2, p1, thickness);
+            } else {
+                DrawLineLowRandom(p1, p2, thickness);
+            }
+        } else {
+            if (p1.y > p2.y) {
+                DrawLineHighRandom(p2, p1, thickness);
+            } else {
+                DrawLineHighRandom(p1, p2, thickness);
+            }
         }
     }
-    else{
-        if(p1.y > p2.y){
-            DrawLineHighRandom(p2, p1, thickness);
-        }
-        else{
-            DrawLineHighRandom(p1, p2, thickness);
-        }
+    catch(std::invalid_argument& exp){
+        std::cerr << exp.what() << std::endl;
     }
 }
 
